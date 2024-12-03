@@ -13,4 +13,5 @@ public interface BoardService {
 
     List<BoardDTO> getRecentBoards();
     List<BoardDTO> findByTitle(String search);
+    List<BoardDTO> findByEmotion(String search);
 }

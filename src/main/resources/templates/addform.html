@@ -15,6 +15,14 @@
     <label for="image">이미지 URL:</label>
     <input type="text" id="image" name="image" placeholder="http://example.com/image.jpg" required>
     <br>
+    <label>감정 선택 :</label>
+    <input type="radio" id="기쁨" name="emotion" value="기쁨" required>
+    <label for="기쁨">기쁨</label>
+    <input type="radio" id="슬픔" name="emotion" value="슬픔" required>
+    <label for="슬픔">슬픔</label>
+    <input type="radio" id="분노" name="emotion" value="분노" required>
+    <label for="분노">분노</label>
+    <br>
     <button type="submit">작성</button>
 </form>
 <a th:href="@{/board}">목록으로 돌아가기</a>

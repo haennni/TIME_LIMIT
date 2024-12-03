@@ -122,6 +122,15 @@ public class BoardServiceImpl implements BoardService {
                 .collect(Collectors.toList());
     }
 
+    /* 감정별 게시글 조회 */
+    @Override
+    public List<BoardDTO> findByEmotion(String search) {
+        return boardRepository.findAll().stream()
+                .filter(board -> board.getEmotion().contains(search))
+                .map(BoardDTO::toDto)
+                .collect(Collectors.toList());
+    }
+
 /*    public List<BoardDTO> getRecentBoards() {
         // 하루 전 시간을 계산
         LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);

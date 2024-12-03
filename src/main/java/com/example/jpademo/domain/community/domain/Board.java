@@ -51,6 +51,7 @@ public class Board {
         this.content = boardDTO.getContent();
         this.image = boardDTO.getImage();
         this.createTime = LocalDateTime.now();
+        this.emotion = boardDTO.getEmotion(); // 추가
         this.user = user;
     }
 

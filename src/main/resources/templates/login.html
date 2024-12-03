@@ -1,23 +1,151 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>로그인</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: white;
+            color: #1E88E5;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            width: 90%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1E88E5;
+        }
+
+        main {
+            width: 70%;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #1E88E5;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-bottom: 2px solid #007acc;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #1E88E5;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #1E88E5;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005b99;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #1E88E5;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-<h1>로그인</h1>
-<form th:action="@{/login}" method="post">
-    <label for="userId">아이디:</label>
-    <input type="text" id="userId" name="userId" required>
-    <br>
-    <label for="userPwd">비밀번호:</label>
-    <input type="password" id="userPwd" name="userPwd" required>
-    <br>
-    <button type="submit">로그인</button>
-</form>
-<div th:if="${error}">
-    <p th:text="${error}" style="color: red;"></p>
-</div>
-<a th:href="@{/signup}">회원가입</a>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <h1>감정 쓰레기통</h1>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h2>로그인</h2>
+    <form th:action="@{/login}" method="post">
+        <label for="userId">아이디:</label>
+        <input type="text" id="userId" name="userId" required>
+
+        <label for="userPwd">비밀번호:</label>
+        <input type="password" id="userPwd" name="userPwd" required>
+
+        <button type="submit">로그인</button>
+    </form>
+
+    <div class="error-message" th:if="${error}">
+        <p th:text="${error}"></p>
+    </div>
+
+    <a th:href="@{/signup}" class="back-link">회원가입</a>
+</main>
+
+<footer>
+    © 2024 감정 쓰레기통
+</footer>
 </body>
 </html>
-

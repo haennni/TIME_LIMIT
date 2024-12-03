@@ -145,6 +145,7 @@ public class BoardServiceImpl implements BoardService {
 
     /* 감정별 게시글 조회 */
     @Override
+    @Transactional(readOnly = true)
     public List<BoardDTO> findByEmotion(String search) {
         return boardRepository.findAll().stream()
                 .filter(board -> board.getEmotion().contains(search))

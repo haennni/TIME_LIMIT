@@ -11,6 +11,73 @@
             padding: 0;
         }
 
+        .header-container {
+            width: 90%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-nav a {
+            color: #1E88E5;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 2px solid #1E88E5;
+            background-color: white; /* 기본 배경색 하얀색 */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header-nav a:hover {
+            background-color: #1E88E5;
+
+            color: white; /* 텍스트는 흰색 */
+        }
+
+        .header-nav .highlight {
+            background-color: #1E88E5;
+            color: white;
+            font-weight: bold;
+        }
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            background-color: #f1f1f1;
+            padding: 10px 0;
+            margin-top: 10px;
+            border-bottom: 2px solid #1E88E5;
+        }
+
+        .category-nav a {
+            text-decoration: none;
+            color: #333;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .category-nav a:hover {
+            background-color: #1E88E5;
+            color: white;
+        }
+
+        .category-nav a.active {
+            background-color: #1E88E5;
+            color: white;
+        }
+
         .emotion-result {
             background-color: #f0f8ff; /* 부드러운 파란색 배경 */
             padding: 20px;
@@ -273,6 +340,29 @@
     </style>
 </head>
 <body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <h1>감정 쓰레기통</h1>
+        </div>
+        <div class="header-nav">
+            <div th:if="${session.userId == null}">
+                <a href="/login" class="highlight">로그인</a>
+                <a href="/signup" class="highlight">회원가입</a>
+            </div>
+            <div th:if="${session.userId != null}">
+                <span class="welcome-text">환영합니다!</span>
+                <a href="/logout" class="highlight">로그아웃</a>
+            </div>
+        </div>
+    </div>
+    <nav class="category-nav">
+        <a href="/home" th:classappend="${currentCategory == 'all' ? 'active' : ''}">전체 게시글</a>
+        <a href="/home/expiring" th:classappend="${currentCategory == 'recent-expiring' ? 'active' : ''}">곧 사라지는 게시글</a>
+        <a href="/home/popular" th:classappend="${currentCategory == 'popular' ? 'active' : ''}">인기 게시글</a>
+    </nav>
+
+</header>
 <div class="container">
     <div class="post-header">
         <h1 class="post-title" th:text="${Board.title}">게시글 제목</h1>

@@ -83,10 +83,12 @@ public class CommunityController {
 
     // 게시글 수정: 로그인 필요
     @PostMapping("board/update/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute BoardDTO Board, HttpSession session) {
-        checkLogin(session);
-        boardService.save(Board);
-        return "redirect:/home";
+    public String update(@PathVariable Long id, @ModelAttribute BoardDTO boardDto, HttpSession session) {
+        Long userId = checkLogin(session);
+        boardDto.setIdx(id); // DTO에 id를 명시적으로 설정
+        boardDto.setUserId(userId); // 사용자 ID 설정
+        boardService.save(boardDto); // 수정 저장
+        return "redirect:/board/" + id;
     }
 
     // 게시글 검색: 로그인하지 않아도 접근 가능

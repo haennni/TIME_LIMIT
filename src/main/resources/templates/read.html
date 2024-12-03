@@ -11,6 +11,28 @@
             padding: 0;
         }
 
+        .emotion-result {
+            background-color: #f0f8ff; /* 부드러운 파란색 배경 */
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .emotion-result h3 {
+            font-size: 1.3rem;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+
+        .emotion-result p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
         .container {
             width: 60%;
             margin: 50px auto;
@@ -273,6 +295,11 @@
         <img th:src="${Board.image}" alt="이미지">
     </div>
     <p><strong>감정:</strong> <span th:text="${Board.emotion}"></span></p>
+
+    <div th:if="${Board.emotionContent != null}" class="emotion-result">
+        <h3>감정 분석 결과</h3>
+        <p th:text="${Board.emotionContent}"></p>
+    </div>
 
     <div class="like-section">
         <form th:action="@{/board/{boardId}/like(boardId=${Board.idx})}" method="post">

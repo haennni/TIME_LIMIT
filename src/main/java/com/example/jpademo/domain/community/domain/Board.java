@@ -51,6 +51,9 @@ public class Board {
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @Column(nullable = false)
+    private int likeCount;
+
     public Board(User user, BoardDTO boardDTO) {
         this.title = boardDTO.getTitle();
         this.content = boardDTO.getContent();
@@ -77,4 +80,14 @@ public class Board {
 
     public void createEmotionContent(String emotionContent) {
         this.emotionContent = emotionContent;}
+
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
 }

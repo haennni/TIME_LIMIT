@@ -31,12 +31,18 @@ public class LikeServiceImpl implements LikeService {
         Board board = existsBoard(boardId);
         User user = existsUser(userId);
 
-        // 특정 사용자와 게시글에 대한 좋아요 여부 확인
         likeRepository.findByBoardAndUser(board, user)
                 .ifPresentOrElse(
-                        likeRepository::delete, // 좋아요가 이미 존재하면 삭제
-                        () -> likeRepository.save(new Like(board, user, LocalDateTime.now())) // 존재하지 않으면 추가
+                        like -> {
+                            likeRepository.delete(like);
+                            board.decrementLikeCount();
+                        },
+                        () -> {
+                            likeRepository.save(new Like(board, user, LocalDateTime.now())); // 존재하지 않으면 추가
+                            board.incrementLikeCount();
+                        }
                 );
+        boardRepository.save(board);
     }
 
     private User existsUser(Long userId) {

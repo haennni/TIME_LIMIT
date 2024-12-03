@@ -10,6 +10,8 @@ import com.example.jpademo.domain.like.dao.LikeRepository;
 import com.example.jpademo.user.dao.UserRepository;
 import com.example.jpademo.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -142,6 +144,35 @@ public class BoardServiceImpl implements BoardService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+
+    @Transactional(readOnly = true)
+    public List<BoardDTO> getPostsWithin23To24Hours() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startTime = now.minusDays(1); // 24시간 전
+        LocalDateTime endTime = now.minusHours(23); // 23시간 전
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return boardRepository.findAllByCreateTimeBetween(startTime, endTime).stream()
+                .map(board -> {
+                    BoardDTO dto = BoardDTO.toDto(board);
+                    dto.setCreateTime(board.getCreateTime().format(formatter)); // 작성일 포맷팅
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardDTO> getPopularBoards() {
+        Pageable pageable = PageRequest.of(0, 10); // 첫 페이지에서 10개만 가져옴
+        List<Board> popularBoards = boardRepository.findTop10ByLikesSizeDesc(pageable);
+
+        return popularBoards.stream()
+                .map(BoardDTO::toDto)
+                .collect(Collectors.toList());
+    }
+
 
     /* 감정별 게시글 조회 */
     @Override

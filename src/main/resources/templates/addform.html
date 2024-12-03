@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시글 작성</title>
+</head>
+<body>
+<h1>게시글 작성</h1>
+<form th:action="@{/board/add}" method="post">
+    <label for="title">제목:</label>
+    <input type="text" id="title" name="title" required>
+    <br>
+    <label for="content">내용:</label>
+    <textarea id="content" name="content" required></textarea>
+    <br>
+    <label for="image">이미지 URL:</label>
+    <input type="text" id="image" name="image" placeholder="http://example.com/image.jpg" required>
+    <br>
+    <button type="submit">작성</button>
+</form>
+<a th:href="@{/board}">목록으로 돌아가기</a>
+</body>
+</html>

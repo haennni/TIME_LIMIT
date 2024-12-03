@@ -85,9 +85,8 @@ public class CommunityController {
     @PostMapping("board/update/{id}")
     public String update(@PathVariable Long id, @ModelAttribute BoardDTO boardDto, HttpSession session) {
         Long userId = checkLogin(session);
-        boardDto.setIdx(id); // DTO에 id를 명시적으로 설정
         boardDto.setUserId(userId); // 사용자 ID 설정
-        boardService.save(boardDto); // 수정 저장
+        boardService.update(id, boardDto); // 업데이트 호출
         return "redirect:/board/" + id;
     }
 

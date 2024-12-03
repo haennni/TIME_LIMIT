@@ -10,6 +10,7 @@ public interface BoardService {
     BoardDTO findById(Long boardId, Long currentUserId);
     void save(BoardDTO Board);
     void deleteById(long idx);
+    void update(Long idx, BoardDTO boardDto);
 
     List<BoardDTO> getRecentBoards();
     List<BoardDTO> findByTitle(String search);

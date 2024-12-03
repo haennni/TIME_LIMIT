@@ -97,6 +97,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public void update(Long boardId, BoardDTO boardDto) {
+        // 기존 게시글 조회
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("Board not found with id: " + boardDto.getIdx()));
+
+        board.update(boardDto);
+        boardRepository.save(board);
+    }
+
+    @Override
     public void deleteById(long idx) {
         boardRepository.deleteById(idx);
     }

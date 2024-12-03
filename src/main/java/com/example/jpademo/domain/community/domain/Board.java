@@ -55,6 +55,13 @@ public class Board {
         this.user = user;
     }
 
+    public void update(BoardDTO boardDTO) {
+        this.title = boardDTO.getTitle();
+        this.content = boardDTO.getContent();
+        this.image = boardDTO.getImage();
+        this.emotion = boardDTO.getEmotion();
+    }
+
     public void extendExpirationTime() {
         createTime.plusHours(1);
     }

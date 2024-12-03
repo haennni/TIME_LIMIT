@@ -33,12 +33,17 @@ public class Board {
 
     private LocalDateTime createTime;
 
+    @Column(columnDefinition = "TEXT")
+    private String emotionContent;
+
     @Column(nullable = false)
     private String emotion;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
@@ -69,4 +74,7 @@ public class Board {
     public int likeCount() {
         return this.likes.size();
     }
+
+    public void createEmotionContent(String emotionContent) {
+        this.emotionContent = emotionContent;}
 }

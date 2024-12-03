@@ -5,6 +5,7 @@ import com.example.jpademo.domain.community.domain.Board;
 import com.example.jpademo.domain.community.dto.BoardDTO;
 import com.example.jpademo.domain.community.application.BoardService;
 import com.example.jpademo.domain.community.dto.CommentDTO;
+import com.example.jpademo.domain.emotion.application.EmotionService;
 import com.example.jpademo.domain.like.dao.LikeRepository;
 import com.example.jpademo.user.dao.UserRepository;
 import com.example.jpademo.user.domain.User;
@@ -23,12 +24,14 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final EmotionService emotionService;
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository, UserRepository userRepository, LikeRepository likeRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository, UserRepository userRepository, LikeRepository likeRepository, EmotionService emotionService) {
         this.boardRepository = boardRepository;
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
+        this.emotionService = emotionService;
     }
 
 /*    @Override
@@ -89,11 +92,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void save(BoardDTO boardDTO) {
         Long userId = boardDTO.getUserId();
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         Board board = new Board(user, boardDTO);
         boardRepository.save(board);
+        if (board.getEmotion().equals("슬픔") || board.getEmotion().equals("분노")) {
+            String emotionContent = emotionService.processEmotion(board.getIdx());
+            board.createEmotionContent(emotionContent); // 결과를 Board 객체에 설정
+            boardRepository.save(board); // 다시 저장
+        }
     }
 
     @Override

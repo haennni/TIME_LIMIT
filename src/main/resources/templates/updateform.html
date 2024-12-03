@@ -136,6 +136,15 @@
         <label for="image">이미지 URL:</label>
         <input type="text" id="image" name="image" th:value="${Board.image}" required>
 
+        <label for="emotion">감정 선택:</label>
+        <select id="emotion" name="emotion" required>
+            <option value="" disabled selected>감정을 선택하세요</option>
+            <option value="기쁨">기쁨</option>
+            <option value="슬픔">슬픔</option>
+            <option value="분노">분노</option>
+        </select>
+        <br>
+
         <button type="submit">수정</button>
     </form>
     <a th:href="@{/home}" class="back-link">목록으로 돌아가기</a>

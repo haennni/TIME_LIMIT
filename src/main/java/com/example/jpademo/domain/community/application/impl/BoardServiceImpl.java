@@ -67,6 +67,7 @@ public class BoardServiceImpl implements BoardService {
                 .collect(Collectors.toList()); // BoardDTO 리스트로 변환 후 반환
     }
 
+
     @Transactional(readOnly = true)
     public BoardDTO findById(Long boardId, Long currentUserId) {
         Board board = boardRepository.findById(boardId)
@@ -121,6 +122,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BoardDTO> findByTitle(String search) {
         return boardRepository.findAll().stream()
                 .filter(board -> board.getTitle().contains(search))

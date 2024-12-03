@@ -20,11 +20,12 @@ public class BoardDTO {
     private String createTime;
     private Long userId;
     private String userName;
+    private String emotion;
     private int likeCount; // 좋아요 수 추가
     private List<CommentDTO> comments; // 변경된 부분
     private boolean likedByCurrentUser; // 현재 사용자 좋아요 여부 추가
 
-    public BoardDTO(long idx, String title, String content, String image, String createTime, String userName, int likeCount, Long userId, List<CommentDTO> comments) {
+    public BoardDTO(long idx, String title, String content, String image, String createTime, String userName, int likeCount, Long userId, List<CommentDTO> comments, String emotion) {
         this.idx = idx;
         this.title = title;
         this.content = content;
@@ -33,6 +34,7 @@ public class BoardDTO {
         this.userName = userName;
         this.likeCount = likeCount;
         this.userId = userId;
+        this.emotion = emotion;
         this.comments = comments;
     }
 
@@ -62,7 +64,8 @@ public class BoardDTO {
                 userName,
                 board.likeCount(), // 좋아요 수 설정
                 userId,
-                comments
+                comments,
+                board.getEmotion()
         );
     }
 }

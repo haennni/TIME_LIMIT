@@ -239,6 +239,17 @@
         <button type="submit">검색</button>
     </form>
 
+    <form action="/board/searchEmotion" method="get">
+        <label for="emotion">감정 검색: </label>
+        <select name="search" id="emotion">
+            <option value="" disabled selected>감정을 선택하세요</option>
+            <option value="기쁨">기쁨</option>
+            <option value="슬픔">슬픔</option>
+            <option value="분노">분노</option>
+        </select>
+        <button type="submit">검색</button>
+    </form>
+
     <table>
         <thead>
         <tr>
@@ -252,7 +263,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:if="${findTitle != null}" th:each="Board : ${findTitle}">
+        <!-- 검색 결과가 있을 경우 -->
+        <tr th:if="${findTitle != null || findEmotion != null}" th:each="Board : ${findTitle != null ? findTitle : findEmotion}">
             <td th:text="${Board.idx}"></td>
             <td><a th:href="@{/board/{id}(id=${Board.idx})}" th:text="${Board.title}"></a></td>
             <td th:text="${Board.content}"></td>
@@ -267,6 +279,8 @@
                 <a th:href="@{/board/update/{id}(id=${Board.idx})}">수정</a>
             </td>
         </tr>
+
+        <!-- 검색 결과가 없을 경우 전체 리스트 표시 -->
         <tr th:if="${findTitle == null}" th:each="Board : ${Boards}">
             <td th:text="${Board.idx}"></td>
             <td><a th:href="@{/board/{id}(id=${Board.idx})}" th:text="${Board.title}"></a></td>

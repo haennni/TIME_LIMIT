@@ -107,6 +107,14 @@ public class CommunityController {
         return "redirect:/board/" + boardId; // 현재 게시글로 리다이렉트
     }
 
+    // 감정별 게시글 조회
+    @RequestMapping("board/searchEmotion")
+    public String searchEmotion(Model model, @RequestParam String search) {
+        List<BoardDTO> findByEmotion = boardService.findByEmotion(search);
+        model.addAttribute("findEmotion", findByEmotion);
+        return "list";
+    }
+
     // 로그인 여부를 확인하는 메서드
     private Long checkLogin(HttpSession session) {
 

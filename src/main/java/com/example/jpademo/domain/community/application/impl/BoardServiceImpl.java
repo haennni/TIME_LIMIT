@@ -5,10 +5,13 @@ import com.example.jpademo.domain.community.domain.Board;
 import com.example.jpademo.domain.community.dto.BoardDTO;
 import com.example.jpademo.domain.community.application.BoardService;
 import com.example.jpademo.domain.community.dto.CommentDTO;
+import com.example.jpademo.domain.emotion.application.EmotionService;
 import com.example.jpademo.domain.like.dao.LikeRepository;
 import com.example.jpademo.user.dao.UserRepository;
 import com.example.jpademo.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +26,14 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final EmotionService emotionService;
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository, UserRepository userRepository, LikeRepository likeRepository) {
+    public BoardServiceImpl(BoardRepository boardRepository, UserRepository userRepository, LikeRepository likeRepository, EmotionService emotionService) {
         this.boardRepository = boardRepository;
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
+        this.emotionService = emotionService;
     }
 
 /*    @Override
@@ -64,6 +69,7 @@ public class BoardServiceImpl implements BoardService {
                 .collect(Collectors.toList()); // BoardDTO 리스트로 변환 후 반환
     }
 
+
     @Transactional(readOnly = true)
     public BoardDTO findById(Long boardId, Long currentUserId) {
         Board board = boardRepository.findById(boardId)
@@ -89,11 +95,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void save(BoardDTO boardDTO) {
         Long userId = boardDTO.getUserId();
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         Board board = new Board(user, boardDTO);
         boardRepository.save(board);
+        if (board.getEmotion().equals("슬픔") || board.getEmotion().equals("분노")) {
+            String emotionContent = emotionService.processEmotion(board.getIdx());
+            board.createEmotionContent(emotionContent); // 결과를 Board 객체에 설정
+            boardRepository.save(board); // 다시 저장
+        }
     }
 
     @Override
@@ -112,6 +124,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BoardDTO> findByTitle(String search) {
         return boardRepository.findAll().stream()
                 .filter(board -> board.getTitle().contains(search))
@@ -133,8 +146,38 @@ public class BoardServiceImpl implements BoardService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+
+    @Transactional(readOnly = true)
+    public List<BoardDTO> getPostsWithin23To24Hours() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startTime = now.minusDays(1); // 24시간 전
+        LocalDateTime endTime = now.minusHours(23); // 23시간 전
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return boardRepository.findAllByCreateTimeBetween(startTime, endTime).stream()
+                .map(board -> {
+                    BoardDTO dto = BoardDTO.toDto(board);
+                    dto.setCreateTime(board.getCreateTime().format(formatter)); // 작성일 포맷팅
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardDTO> getPopularBoards() {
+        Pageable pageable = PageRequest.of(0, 10); // 첫 페이지에서 10개만 가져옴
+        List<Board> popularBoards = boardRepository.findTop10ByLikesSizeDesc(pageable);
+
+        return popularBoards.stream()
+                .map(BoardDTO::toDto)
+                .collect(Collectors.toList());
+    }
+
+
     /* 감정별 게시글 조회 */
     @Override
+    @Transactional(readOnly = true)
     public List<BoardDTO> findByEmotion(String search) {
         return boardRepository.findAll().stream()
                 .filter(board -> board.getEmotion().contains(search))

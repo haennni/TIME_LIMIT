@@ -23,16 +23,25 @@ public class CommunityController {
         this.boardService = boardService;
     }
 
-/*    // 홈 페이지: 모든 게시글을 반환하는거
-    @RequestMapping("home")
-    public String list(Model model) {
-        model.addAttribute("Boards", boardService.findAll());
-        return "list";
-    }*/
-
     @RequestMapping("home")
     public String list(Model model) {
         model.addAttribute("Boards", boardService.getRecentBoards());
+        return "list";
+    }
+
+    @GetMapping("home/expiring")
+    public String getExpiringBoards(Model model) {
+        List<BoardDTO> boards = boardService.getPostsWithin23To24Hours();
+        model.addAttribute("Boards", boards);
+        model.addAttribute("currentCategory", "recent-expiring");
+        return "list";
+    }
+
+    @GetMapping("home/popular")
+    public String getPopularBoards(Model model) {
+        List<BoardDTO> boards = boardService.getPopularBoards();
+        model.addAttribute("Boards", boards);
+        model.addAttribute("currentCategory", "popular");
         return "list";
     }
 

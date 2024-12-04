@@ -5,8 +5,9 @@ import com.example.jpademo.domain.community.dto.BoardDTO;
 import java.util.List;
 
 public interface BoardService {
+    List<BoardDTO> getPopularBoards();
     List<BoardDTO> findAll();
-
+    List<BoardDTO> getPostsWithin23To24Hours();
     BoardDTO findById(Long boardId, Long currentUserId);
     void save(BoardDTO Board);
     void deleteById(long idx);

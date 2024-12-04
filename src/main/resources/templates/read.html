@@ -11,6 +11,95 @@
             padding: 0;
         }
 
+        .header-container {
+            width: 90%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-nav a {
+            color: #1E88E5;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 2px solid #1E88E5;
+            background-color: white; /* 기본 배경색 하얀색 */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header-nav a:hover {
+            background-color: #1E88E5;
+
+            color: white; /* 텍스트는 흰색 */
+        }
+
+        .header-nav .highlight {
+            background-color: #1E88E5;
+            color: white;
+            font-weight: bold;
+        }
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            background-color: #f1f1f1;
+            padding: 10px 0;
+            margin-top: 10px;
+            border-bottom: 2px solid #1E88E5;
+        }
+
+        .category-nav a {
+            text-decoration: none;
+            color: #333;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .category-nav a:hover {
+            background-color: #1E88E5;
+            color: white;
+        }
+
+        .category-nav a.active {
+            background-color: #1E88E5;
+            color: white;
+        }
+
+        .emotion-result {
+            background-color: #f0f8ff; /* 부드러운 파란색 배경 */
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .emotion-result h3 {
+            font-size: 1.3rem;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+
+        .emotion-result p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
         .container {
             width: 60%;
             margin: 50px auto;
@@ -205,8 +294,13 @@
 
         .comment-item strong {
             display: block;
-            font-size: 0.9rem;
+            font-size: 1.3rem;
             color: #007bff;
+        }
+        .comment-item p {
+            display: block;
+            font-size: 0.9rem;
+            color: #888; /* 회색으로 변경 */
         }
 
         .comment-item span {
@@ -216,18 +310,17 @@
 
         .comment-input {
             margin-top: 20px;
-            display: flex;
-            align-items: center;
+            margin-right: 10px;
             gap: 10px;
         }
-
         .comment-input textarea {
-            flex: 1;
+            flex: 1; /* 버튼 제외 나머지 공간을 차지 */
+            width: 100%; /* 부모 컨테이너에 맞게 확장 */
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             resize: none;
-            height: 60px;
+            height: 60px; /* 기본 높이 설정 */
         }
 
         .comment-input button {
@@ -237,14 +330,39 @@
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            height: 40px; /* 버튼 높이를 textarea 높이에 맞춤 */
         }
 
         .comment-input button:hover {
             background-color: #0056b3;
         }
+
     </style>
 </head>
 <body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <h1>감정 쓰레기통</h1>
+        </div>
+        <div class="header-nav">
+            <div th:if="${session.userId == null}">
+                <a href="/login" class="highlight">로그인</a>
+                <a href="/signup" class="highlight">회원가입</a>
+            </div>
+            <div th:if="${session.userId != null}">
+                <span class="welcome-text">환영합니다!</span>
+                <a href="/logout" class="highlight">로그아웃</a>
+            </div>
+        </div>
+    </div>
+    <nav class="category-nav">
+        <a href="/home" th:classappend="${currentCategory == 'all' ? 'active' : ''}">전체 게시글</a>
+        <a href="/home/expiring" th:classappend="${currentCategory == 'recent-expiring' ? 'active' : ''}">곧 사라지는 게시글</a>
+        <a href="/home/popular" th:classappend="${currentCategory == 'popular' ? 'active' : ''}">인기 게시글</a>
+    </nav>
+
+</header>
 <div class="container">
     <div class="post-header">
         <h1 class="post-title" th:text="${Board.title}">게시글 제목</h1>
@@ -254,7 +372,7 @@
             <div class="more-menu">
                 <button class="more-button">더보기 ▼</button>
                 <div class="more-dropdown">
-                    <a href="#">복사하기</a>
+                    <a href="/board/update/' + ${Board.idx}">수정하기</a>
                     <a href="#">이동하기</a>
                     <a href="#">공지 설정하기</a>
                     <a href="#">메일 공유하기</a>
@@ -274,6 +392,11 @@
     </div>
     <p><strong>감정:</strong> <span th:text="${Board.emotion}"></span></p>
 
+    <div th:if="${Board.emotionContent != null}" class="emotion-result">
+        <h3>감정 분석 결과</h3>
+        <p th:text="${Board.emotionContent}"></p>
+    </div>
+
     <div class="like-section">
         <form th:action="@{/board/{boardId}/like(boardId=${Board.idx})}" method="post">
             <button class="like-button" type="submit">
@@ -289,11 +412,13 @@
         <ul class="comment-list">
             <li class="comment-item" th:each="comment : ${Board.comments}">
                 <strong th:text="${comment.userName}">댓글 작성자</strong>
+                <p th:text="${comment.getCommentTime()}"/>
+                <br>
                 <span th:text="${comment.content}">댓글 내용</span>
             </li>
         </ul>
         <div class="comment-input">
-            <form th:action="@{/comments}" method="post">
+            <form th:action="@{/board/{boardId}/comments(boardId=${Board.idx})}" method="post">
                 <input type="hidden" th:name="boardId" th:value="${Board.idx}"/>
                 <textarea name="content" placeholder="댓글을 입력하세요" required></textarea><br/>
                 <button type="submit">댓글 등록</button>

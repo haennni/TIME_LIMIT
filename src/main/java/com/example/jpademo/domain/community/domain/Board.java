@@ -33,6 +33,9 @@ public class Board {
 
     private LocalDateTime createTime;
 
+    @Column(columnDefinition = "TEXT")
+    private String emotionContent;
+
     @Column(nullable = false)
     private String emotion;
 
@@ -40,11 +43,16 @@ public class Board {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @Column(nullable = false)
+    private int likeCount;
 
     public Board(User user, BoardDTO boardDTO) {
         this.title = boardDTO.getTitle();
@@ -68,5 +76,18 @@ public class Board {
 
     public int likeCount() {
         return this.likes.size();
+    }
+
+    public void createEmotionContent(String emotionContent) {
+        this.emotionContent = emotionContent;}
+
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
     }
 }

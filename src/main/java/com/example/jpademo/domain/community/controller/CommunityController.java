@@ -114,6 +114,20 @@ public class CommunityController {
         return "list";
     }
 
+    // 감정별 통계 페이지
+    @GetMapping("/statistics")
+    public String showStatistics(Model model) {
+        long happyCount = boardService.getHappyCount();
+        long sadCount = boardService.getSadCount();
+        long angryCount = boardService.getAngryCount();
+
+        model.addAttribute("happyCount", happyCount);
+        model.addAttribute("sadCount", sadCount);
+        model.addAttribute("angryCount", angryCount);
+
+        return "statistics"; // 통계 페이지
+    }
+
     // 로그인 여부를 확인하는 메서드
     private Long checkLogin(HttpSession session) {
 

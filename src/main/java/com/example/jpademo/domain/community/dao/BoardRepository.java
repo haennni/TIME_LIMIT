@@ -23,4 +23,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @EntityGraph(attributePaths = {"user", "comments"})
     List<Board> findAll();
 
+    long countByEmotion(String emotion);
 }

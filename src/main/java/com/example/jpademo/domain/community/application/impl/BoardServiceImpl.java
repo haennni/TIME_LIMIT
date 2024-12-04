@@ -131,6 +131,7 @@ public class BoardServiceImpl implements BoardService {
                 .map(BoardDTO::toDto)
                 .collect(Collectors.toList());
     }
+
     @Override
     @Transactional(readOnly = true)
     public List<BoardDTO> getRecentBoards() {
@@ -182,6 +183,21 @@ public class BoardServiceImpl implements BoardService {
                 .filter(board -> board.getEmotion().contains(search))
                 .map(BoardDTO::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public long getHappyCount() {
+        return boardRepository.countByEmotion("기쁨");
+    }
+
+    @Override
+    public long getSadCount() {
+        return boardRepository.countByEmotion("슬픔");
+    }
+
+    @Override
+    public long getAngryCount() {
+        return boardRepository.countByEmotion("분노");
     }
 
 /*    public List<BoardDTO> getRecentBoards() {

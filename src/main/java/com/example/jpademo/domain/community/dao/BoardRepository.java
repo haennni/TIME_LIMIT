@@ -26,6 +26,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("SELECT b FROM Board b WHERE b.createTime BETWEEN :startTime AND :endTime")
     List<Board> findAllByCreateTimeBetween(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
-
-
+  
+    long countByEmotion(String emotion);
 }

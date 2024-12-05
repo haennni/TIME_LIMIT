@@ -27,6 +27,7 @@ public class BoardServiceImpl implements BoardService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final EmotionService emotionService;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public BoardServiceImpl(BoardRepository boardRepository, UserRepository userRepository, LikeRepository likeRepository, EmotionService emotionService) {
@@ -83,12 +84,11 @@ public class BoardServiceImpl implements BoardService {
             User findUser = userRepository.findById(currentUserId)
                     .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
             boolean likedByCurrentUser = likeRepository.findByBoardAndUser(board, user).isPresent();
-            dto.setLikedByCurrentUser(likedByCurrentUser); // 좋아요 여부 설정
+            dto.setLikedByCurrentUser(likedByCurrentUser);
         } else {
-            dto.setLikedByCurrentUser(false); // 비로그인 사용자는 좋아요를 누를 수 없음
+            dto.setLikedByCurrentUser(false);
         }
-
-        dto.setLikeCount(board.likeCount()); // 좋아요 수 설정
+        dto.setLikeCount(board.likeCount());
 
 
         return dto;
@@ -103,8 +103,8 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(board);
         if (board.getEmotion().equals("슬픔") || board.getEmotion().equals("분노")) {
             String emotionContent = emotionService.processEmotion(board.getIdx());
-            board.createEmotionContent(emotionContent); // 결과를 Board 객체에 설정
-            boardRepository.save(board); // 다시 저장
+            board.createEmotionContent(emotionContent);
+            boardRepository.save(board);
         }
     }
 
@@ -132,12 +132,11 @@ public class BoardServiceImpl implements BoardService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     @Transactional(readOnly = true)
     public List<BoardDTO> getRecentBoards() {
-        LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1); // 하루 전
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return boardRepository.findAllByCreateTimeWithinOneDay(oneDayAgo).stream()
+        LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
+
+        return boardRepository.findAllByLifeTimeWithinOneDay(oneDayAgo).stream()
                 .map(board -> {
                     BoardDTO dto = BoardDTO.toDto(board);
                     dto.setCreateTime(board.getCreateTime().format(formatter)); // 작성일 포맷팅
@@ -154,8 +153,7 @@ public class BoardServiceImpl implements BoardService {
         LocalDateTime startTime = now.minusDays(1); // 24시간 전
         LocalDateTime endTime = now.minusHours(23); // 23시간 전
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return boardRepository.findAllByCreateTimeBetween(startTime, endTime).stream()
+        return boardRepository.findAllByLifeTimeBetween(startTime, endTime).stream()
                 .map(board -> {
                     BoardDTO dto = BoardDTO.toDto(board);
                     dto.setCreateTime(board.getCreateTime().format(formatter)); // 작성일 포맷팅
@@ -166,7 +164,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardDTO> getPopularBoards() {
-        Pageable pageable = PageRequest.of(0, 10); // 첫 페이지에서 10개만 가져옴
+        Pageable pageable = PageRequest.of(0, 10);
         List<Board> popularBoards = boardRepository.findTop10ByLikesSizeDesc(pageable);
 
         return popularBoards.stream()

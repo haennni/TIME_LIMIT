@@ -33,6 +33,8 @@ public class Board {
 
     private LocalDateTime createTime;
 
+    private LocalDateTime lifeTime;
+
     @Column(columnDefinition = "TEXT")
     private String emotionContent;
 
@@ -59,6 +61,7 @@ public class Board {
         this.content = boardDTO.getContent();
         this.image = boardDTO.getImage();
         this.createTime = LocalDateTime.now();
+        this.lifeTime = LocalDateTime.now();
         this.emotion = boardDTO.getEmotion(); // 추가
         this.user = user;
     }
@@ -90,4 +93,17 @@ public class Board {
             this.likeCount--;
         }
     }
+
+    public void incrementLifeTime() {
+        if (this.lifeTime != null) {
+            this.lifeTime = this.lifeTime.plusHours(1);
+        }
+    }
+
+    public void decrementLifeTime() {
+        if (this.lifeTime != null) {
+            this.lifeTime = this.lifeTime.minusHours(1);
+        }
+    }
+
 }

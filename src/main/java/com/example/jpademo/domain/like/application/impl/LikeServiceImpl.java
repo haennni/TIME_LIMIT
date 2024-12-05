@@ -36,10 +36,12 @@ public class LikeServiceImpl implements LikeService {
                         like -> {
                             likeRepository.delete(like);
                             board.decrementLikeCount();
+                            board.decrementLifeTime();
                         },
                         () -> {
                             likeRepository.save(new Like(board, user, LocalDateTime.now())); // 존재하지 않으면 추가
                             board.incrementLikeCount();
+                            board.incrementLifeTime();
                         }
                 );
         boardRepository.save(board);
@@ -52,4 +54,6 @@ public class LikeServiceImpl implements LikeService {
     private Board existsBoard(Long boardId) {
         return boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));}
+
+
 }

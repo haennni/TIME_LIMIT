@@ -259,24 +259,25 @@
         <button type="submit">검색</button>
     </form>
 
-    <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
-        <!-- 감정 검색 폼 -->
-        <form action="/board/searchEmotion" method="get" style="display: flex; align-items: center; gap: 10px;">
-            <label for="emotion">감정 : </label>
-            <select name="search" id="emotion">
-                <option value="" disabled selected>감정을 선택하세요</option>
-                <option value="기쁨">기쁨</option>
-                <option value="슬픔">슬픔</option>
-                <option value="분노">분노</option>
-            </select>
-            <button type="submit">검색</button>
-        </form>
+    <div style="display: flex; justify-content: center; align-items: center;">
+    <!-- 감정 검색 폼 -->
+    <form action="/board/searchEmotion" method="get" style="display: inline-block; width: 48%;">
+        <label for="emotion">감정 : </label>
+        <select name="search" id="emotion">
+            <option value="" disabled selected>감정을 선택하세요</option>
+            <option value="기쁨">기쁨</option>
+            <option value="슬픔">슬픔</option>
+            <option value="분노">분노</option>
+        </select>
+        <button type="submit">검색</button>
+    </form>
 
-        <!-- 이동 버튼 -->
-        <div class="action-buttons" style="display: inline-block;">
-            <a href="/statistics" style="text-decoration: none; background-color: #1E88E5; color: white; padding: 10px 20px; border-radius: 5px;">통계 그래프</a>
-        </div>
+    <!-- 이동 버튼 -->
+    <div class="action-buttons" style="display: inline-block;">
+        <a href="/statistics" style="text-decoration: none; background-color: #1E88E5; color: white; padding: 10px 20px; border-radius: 5px;">통계 그래프</a>
     </div>
+</div>
+
 
 
     <table>

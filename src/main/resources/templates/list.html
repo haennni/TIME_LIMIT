@@ -52,14 +52,13 @@
             padding: 8px 15px;
             border-radius: 5px;
             border: 2px solid #1E88E5;
-            background-color: white; /* 기본 배경색 하얀색 */
+            background-color: white;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .header-nav a:hover {
             background-color: #1E88E5;
-
-            color: white; /* 텍스트는 흰색 */
+            color: white;
         }
 
         .header-nav .highlight {
@@ -149,7 +148,7 @@
             gap: 10px;
         }
 
-        input[type="text"] {
+        input[type="text"], select {
             width: 60%;
             padding: 12px;
             border: 1px solid #1E88E5;
@@ -164,6 +163,7 @@
             border-radius: 5px;
             font-weight: bold;
             cursor: pointer;
+            width: auto;
         }
 
         button:hover {
@@ -241,7 +241,6 @@
         <a href="/home/expiring" th:classappend="${currentCategory == 'recent-expiring' ? 'active' : ''}">곧 사라지는 게시글</a>
         <a href="/home/popular" th:classappend="${currentCategory == 'popular' ? 'active' : ''}">인기 게시글</a>
     </nav>
-
 </header>
 
 <main>
@@ -260,16 +259,25 @@
         <button type="submit">검색</button>
     </form>
 
-    <form action="/board/searchEmotion" method="get">
-        <label for="emotion">감정 검색: </label>
-        <select name="search" id="emotion">
-            <option value="" disabled selected>감정을 선택하세요</option>
-            <option value="기쁨">기쁨</option>
-            <option value="슬픔">슬픔</option>
-            <option value="분노">분노</option>
-        </select>
-        <button type="submit">검색</button>
-    </form>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+        <!-- 감정 검색 폼 -->
+        <form action="/board/searchEmotion" method="get" style="display: flex; align-items: center; gap: 10px;">
+            <label for="emotion">감정 : </label>
+            <select name="search" id="emotion">
+                <option value="" disabled selected>감정을 선택하세요</option>
+                <option value="기쁨">기쁨</option>
+                <option value="슬픔">슬픔</option>
+                <option value="분노">분노</option>
+            </select>
+            <button type="submit">검색</button>
+        </form>
+
+        <!-- 이동 버튼 -->
+        <div class="action-buttons" style="display: inline-block;">
+            <a href="/statistics" style="text-decoration: none; background-color: #1E88E5; color: white; padding: 10px 20px; border-radius: 5px;">통계 그래프</a>
+        </div>
+    </div>
+
 
     <table>
         <thead>

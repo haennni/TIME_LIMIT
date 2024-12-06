@@ -123,9 +123,10 @@ public class CommunityController {
         return "list";
     }
 
-    // 감정별 통계 페이지
+    // 전체 감정 통계 페이지
     @GetMapping("/statistics")
-    public String showStatistics(Model model) {
+    public String getOverallStatistics(Model model) {
+
         long happyCount = boardService.getHappyCount();
         long sadCount = boardService.getSadCount();
         long angryCount = boardService.getAngryCount();
@@ -133,8 +134,24 @@ public class CommunityController {
         model.addAttribute("happyCount", happyCount);
         model.addAttribute("sadCount", sadCount);
         model.addAttribute("angryCount", angryCount);
+        model.addAttribute("activePage", "overall");
 
-        return "statistics"; // 통계 페이지
+        return "statistics";  // 전체 통계를 위한 페이지
+    }
+
+    // 최근 게시글 감정 통계 페이지
+    @GetMapping("/statistics/recent")
+    public String getRecentStatistics(Model model) {
+
+        // 최근 게시글 감정 통계
+        List<Long> recentEmotionCounts = boardService.getEmotionCountsForRecentBoards();
+
+        model.addAttribute("recentHappyCount", recentEmotionCounts.get(0));
+        model.addAttribute("recentSadCount", recentEmotionCounts.get(1));
+        model.addAttribute("recentAngryCount", recentEmotionCounts.get(2));
+        model.addAttribute("activePage", "recent");
+
+        return "statistics";  // 최근 게시글 통계를 위한 페이지
     }
 
     // 로그인 여부를 확인하는 메서드

@@ -172,7 +172,6 @@ public class BoardServiceImpl implements BoardService {
                 .collect(Collectors.toList());
     }
 
-
     /* 감정별 게시글 조회 */
     @Override
     @Transactional(readOnly = true)
@@ -196,6 +195,38 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public long getAngryCount() {
         return boardRepository.countByEmotion("분노");
+    }
+
+
+    /* 하루남은 게시글 감정 조회 */
+    @Transactional(readOnly = true)
+    public List<Long> getEmotionCountsForRecentBoards() {
+        LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
+
+        // 감정별 게시글 수 카운트를 위한 쿼리 호출
+        List<Object[]> emotionCounts = boardRepository.countEmotionByLifeTime(oneDayAgo);
+
+        // 각 감정의 카운트를 저장할 변수 초기화
+        long happyCount = 0;
+        long sadCount = 0;
+        long angryCount = 0;
+
+        // 결과 처리
+        for (Object[] result : emotionCounts) {
+            String emotion = (String) result[0];  // 감정 값 (기쁨, 슬픔, 분노 등)
+            Long count = (Long) result[1];        // 해당 감정의 게시글 수
+
+            // 각 감정에 대한 카운트 처리
+            if ("기쁨".equals(emotion)) {
+                happyCount = count;
+            } else if ("슬픔".equals(emotion)) {
+                sadCount = count;
+            } else if ("분노".equals(emotion)) {
+                angryCount = count;
+            }
+        }
+
+        return List.of(happyCount, sadCount, angryCount);
     }
 
 /*    public List<BoardDTO> getRecentBoards() {

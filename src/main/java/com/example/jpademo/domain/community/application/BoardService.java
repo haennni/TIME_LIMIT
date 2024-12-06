@@ -21,4 +21,6 @@ public interface BoardService {
     long getHappyCount();
     long getSadCount();
     long getAngryCount();
+
+    List<Long> getEmotionCountsForRecentBoards();
 }

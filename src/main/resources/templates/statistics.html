@@ -38,6 +38,72 @@
       color: #1E88E5;
     }
 
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-nav a {
+      color: #1E88E5;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 5px;
+      border: 2px solid #1E88E5;
+      background-color: white;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .header-nav a:hover {
+      background-color: #1E88E5;
+      color: white;
+    }
+
+    .header-nav .highlight {
+      background-color: #1E88E5;
+      color: white;
+      font-weight: bold;
+    }
+
+    .welcome-text {
+      margin-right: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #1E88E5;
+    }
+
+    .category-nav {
+      display: flex;
+      justify-content: center;
+      background-color: #f1f1f1;
+      padding: 10px 0;
+      margin-top: 10px;
+      border-bottom: 2px solid #1E88E5;
+    }
+
+    .category-nav a {
+      text-decoration: none;
+      color: #333;
+      padding: 10px 20px;
+      margin: 0 5px;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .category-nav a:hover {
+      background-color: #1E88E5;
+      color: white;
+    }
+
+    .category-nav a.active {
+      background-color: #1E88E5;
+      color: white;
+    }
+
+
     main {
       width: 70%;
       margin: 50px auto;
@@ -60,21 +126,13 @@
 
     .chart-container {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      margin: 30px 0;
-      height: 400px;
-      border: 1px solid #ddd;
-      padding: 20px;
-    }
-
-    .chart-bar-group {
-      display: flex;
       justify-content: space-around;
       align-items: flex-end;
-      width: 100%;
+      margin: 30px 0;
       height: 300px;
+      border: 1px solid #ddd;
+      padding: 10px;
+
     }
 
     .chart-bar {
@@ -92,15 +150,15 @@
     }
 
     .happy .bar {
-      background-color: yellow; /* 기쁨 색상 */
+      background-color: #FFD400;
     }
 
     .sad .bar {
-      background-color: blue; /* 슬픔 색상 */
+      background-color: #27AAE1;
     }
 
     .angry .bar {
-      background-color: red; /* 분노 색상 */
+      background-color: #EF404A;
     }
 
     .label {
@@ -115,20 +173,35 @@
       color: #666;
     }
 
-    .home-button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #1E88E5;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
+    .statistics-nav {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
     }
 
-    .home-button:hover {
-      background-color: #1565C0;
+    .statistics-nav a {
+      text-decoration: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      border: 2px solid #1E88E5;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+
+    .statistics-nav a:hover {
+      background-color: #1E88E5;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .statistics-nav a.active {
+      background-color: #1E88E5;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
 
     footer {
@@ -140,44 +213,86 @@
       font-weight: bold;
       border-radius: 0 0 10px 10px;
     }
+
   </style>
 </head>
 <body>
 <header>
   <div class="header-container">
     <div class="logo">
-      <h1>감정 쓰레기통</h1>
+      <h1>TIME LIMIT</h1>
+    </div>
+    <div class="header-nav">
+      <div th:if="${session.userId == null}">
+        <a href="/login" class="highlight">로그인</a>
+        <a href="/signup" class="highlight">회원가입</a>
+      </div>
+      <div th:if="${session.userId != null}">
+        <span class="welcome-text">환영합니다!</span>
+        <a href="/logout" class="highlight">로그아웃</a>
+      </div>
     </div>
   </div>
+  <nav class="category-nav">
+    <a href="/home" th:classappend="${currentCategory == 'all' ? 'active' : ''}">전체 게시글</a>
+    <a href="/home/expiring" th:classappend="${currentCategory == 'recent-expiring' ? 'active' : ''}">곧 사라지는 게시글</a>
+    <a href="/home/popular" th:classappend="${currentCategory == 'popular' ? 'active' : ''}">인기 게시글</a>
+  </nav>
 </header>
 
 <main>
   <h2>감정별 통계</h2>
-  <h4>현재까지 작성된 전체 게시글의 감정별 통계 그래프</h4>
-  <div class="chart-container">
-    <div class="chart-bar-group">
-      <div class="chart-bar happy">
-        <div class="bar" th:style="'height: ' + (${happyCount} * 10) + 'px'"></div>
-        <div class="label">기쁨</div>
-        <div class="count" th:text="${happyCount}">개</div>
-      </div>
-      <div class="chart-bar sad">
-        <div class="bar" th:style="'height: ' + (${sadCount} * 10) + 'px'"></div>
-        <div class="label">슬픔</div>
-        <div class="count" th:text="${sadCount}"></div>
-      </div>
-      <div class="chart-bar angry">
-        <div class="bar" th:style="'height: ' + (${angryCount} * 10) + 'px'"></div>
-        <div class="label">분노</div>
-        <div class="count" th:text="${angryCount}"></div>
-      </div>
+
+  <div class="statistics-nav">
+    <a href="/statistics"
+       th:classappend="${activePage == 'overall' ? 'active' : ''}">전체 게시글 통계</a>
+    <a href="/statistics/recent"
+       th:classappend="${activePage == 'recent' ? 'active' : ''}">최근 게시글 통계</a>
+  </div>
+
+  <p class="subtitle" th:if="${activePage == 'overall'}">지금까지 작성된 전체 게시글의 감정 통계를 확인하세요.</p>
+  <p class="subtitle" th:if="${activePage == 'recent'}">현재 남아있는 게시글의 감정 통계를 확인하세요.</p>
+
+  <div class="chart-container" th:if="${activePage == 'overall'}">
+    <div class="chart-bar happy">
+      <div class="bar" th:style="'height: ' + (${happyCount} * 10) + 'px'"></div>
+      <div class="label">기쁨</div>
+      <div class="count" th:text="${happyCount}">개</div>
     </div>
-    <a href="/home" class="home-button">메인으로 이동</a>
+    <div class="chart-bar sad">
+      <div class="bar" th:style="'height: ' + (${sadCount} * 10) + 'px'"></div>
+      <div class="label">슬픔</div>
+      <div class="count" th:text="${sadCount}">개</div>
+    </div>
+    <div class="chart-bar angry">
+      <div class="bar" th:style="'height: ' + (${angryCount} * 10) + 'px'"></div>
+      <div class="label">분노</div>
+      <div class="count" th:text="${angryCount}">개</div>
+    </div>
+  </div>
+
+  <!-- 최근 게시글 통계 -->
+  <div class="chart-container" th:if="${activePage == 'recent'}">
+    <div class="chart-bar happy">
+      <div class="bar" th:style="'height: ' + (${recentHappyCount} * 10) + 'px'"></div>
+      <div class="label">기쁨</div>
+      <div class="count" th:text="${recentHappyCount}">개</div>
+    </div>
+    <div class="chart-bar sad">
+      <div class="bar" th:style="'height: ' + (${recentSadCount} * 10) + 'px'"></div>
+      <div class="label">슬픔</div>
+      <div class="count" th:text="${recentSadCount}">개</div>
+    </div>
+    <div class="chart-bar angry">
+      <div class="bar" th:style="'height: ' + (${recentAngryCount} * 10) + 'px'"></div>
+      <div class="label">분노</div>
+      <div class="count" th:text="${recentAngryCount}">개</div>
+    </div>
   </div>
 </main>
 
 <footer>
-  © 2024 감정 쓰레기통
+  © 2024 TIME LIMIT
 </footer>
 </body>
 </html>

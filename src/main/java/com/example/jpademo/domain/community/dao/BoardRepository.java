@@ -27,4 +27,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findAllByLifeTimeBetween(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
   
     long countByEmotion(String emotion);
+
+    // 감정별 게시글 수 카운트 (하루 남은 게시글 기준)
+    @Query("SELECT b.emotion, COUNT(b) FROM Board b WHERE b.lifeTime >= :threshold GROUP BY b.emotion")
+    List<Object[]> countEmotionByLifeTime(@Param("threshold") LocalDateTime threshold);
 }

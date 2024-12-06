@@ -23,16 +23,25 @@ public class CommunityController {
         this.boardService = boardService;
     }
 
-/*    // 홈 페이지: 모든 게시글을 반환하는거
-    @RequestMapping("home")
-    public String list(Model model) {
-        model.addAttribute("Boards", boardService.findAll());
-        return "list";
-    }*/
-
     @RequestMapping("home")
     public String list(Model model) {
         model.addAttribute("Boards", boardService.getRecentBoards());
+        return "list";
+    }
+
+    @GetMapping("home/expiring")
+    public String getExpiringBoards(Model model) {
+        List<BoardDTO> boards = boardService.getPostsWithin23To24Hours();
+        model.addAttribute("Boards", boards);
+        model.addAttribute("currentCategory", "recent-expiring");
+        return "list";
+    }
+
+    @GetMapping("home/popular")
+    public String getPopularBoards(Model model) {
+        List<BoardDTO> boards = boardService.getPopularBoards();
+        model.addAttribute("Boards", boards);
+        model.addAttribute("currentCategory", "popular");
         return "list";
     }
 
@@ -112,6 +121,37 @@ public class CommunityController {
         List<BoardDTO> findByEmotion = boardService.findByEmotion(search);
         model.addAttribute("findEmotion", findByEmotion);
         return "list";
+    }
+
+    // 전체 감정 통계 페이지
+    @GetMapping("/statistics")
+    public String getOverallStatistics(Model model) {
+
+        long happyCount = boardService.getHappyCount();
+        long sadCount = boardService.getSadCount();
+        long angryCount = boardService.getAngryCount();
+
+        model.addAttribute("happyCount", happyCount);
+        model.addAttribute("sadCount", sadCount);
+        model.addAttribute("angryCount", angryCount);
+        model.addAttribute("activePage", "overall");
+
+        return "statistics";  // 전체 통계를 위한 페이지
+    }
+
+    // 최근 게시글 감정 통계 페이지
+    @GetMapping("/statistics/recent")
+    public String getRecentStatistics(Model model) {
+
+        // 최근 게시글 감정 통계
+        List<Long> recentEmotionCounts = boardService.getEmotionCountsForRecentBoards();
+
+        model.addAttribute("recentHappyCount", recentEmotionCounts.get(0));
+        model.addAttribute("recentSadCount", recentEmotionCounts.get(1));
+        model.addAttribute("recentAngryCount", recentEmotionCounts.get(2));
+        model.addAttribute("activePage", "recent");
+
+        return "statistics";  // 최근 게시글 통계를 위한 페이지
     }
 
     // 로그인 여부를 확인하는 메서드

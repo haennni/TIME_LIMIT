@@ -33,6 +33,11 @@ public class Board {
 
     private LocalDateTime createTime;
 
+    private LocalDateTime lifeTime;
+
+    @Column(columnDefinition = "TEXT")
+    private String emotionContent;
+
     @Column(nullable = false)
     private String emotion;
 
@@ -40,17 +45,22 @@ public class Board {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @Column(nullable = false)
+    private int likeCount;
+
     public Board(User user, BoardDTO boardDTO) {
         this.title = boardDTO.getTitle();
         this.content = boardDTO.getContent();
         this.image = boardDTO.getImage();
         this.createTime = LocalDateTime.now();
+        this.lifeTime = LocalDateTime.now();
         this.emotion = boardDTO.getEmotion(); // 추가
         this.user = user;
     }
@@ -69,4 +79,30 @@ public class Board {
     public int likeCount() {
         return this.likes.size();
     }
+
+    public void createEmotionContent(String emotionContent) {
+        this.emotionContent = emotionContent;}
+
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
+
+    public void incrementLifeTime() {
+        if (this.lifeTime != null) {
+            this.lifeTime = this.lifeTime.plusHours(1);
+        }
+    }
+
+    public void decrementLifeTime() {
+        if (this.lifeTime != null) {
+            this.lifeTime = this.lifeTime.minusHours(1);
+        }
+    }
+
 }

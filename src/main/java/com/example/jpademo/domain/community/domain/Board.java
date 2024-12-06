@@ -45,7 +45,6 @@ public class Board {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 

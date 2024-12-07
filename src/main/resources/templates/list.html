@@ -3,334 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <title>Time Limit</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: white;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: white;
-            color: #1E88E5;
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-container {
-            width: 90%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-        }
-
-        .logo h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #1E88E5;
-        }
-
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .header-nav a {
-            color: #1E88E5;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-            padding: 8px 15px;
-            border-radius: 5px;
-            border: 2px solid #1E88E5;
-            background-color: white;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .header-nav a:hover {
-            background-color: #1E88E5;
-            color: white;
-        }
-
-        .header-nav .highlight {
-            background-color: #1E88E5;
-            color: white;
-            font-weight: bold;
-        }
-
-        .welcome-text {
-            margin-right: 10px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #1E88E5;
-        }
-
-        .category-nav {
-            display: flex;
-            justify-content: center;
-            background-color: #f1f1f1;
-            padding: 10px 0;
-            margin-top: 10px;
-            border-bottom: 2px solid #1E88E5;
-        }
-
-        .category-nav a {
-            text-decoration: none;
-            color: #333;
-            padding: 10px 20px;
-            margin: 0 5px;
-            font-weight: bold;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .category-nav a:hover {
-            background-color: #1E88E5;
-            color: white;
-        }
-
-        .category-nav a.active {
-            background-color: #1E88E5;
-            color: white;
-        }
-
-        main {
-            width: 70%;
-            margin: 50px auto;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            text-align: center;
-        }
-
-        h2 {
-            color: #1E88E5;
-            margin-bottom: 30px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border-bottom: 2px solid #007acc;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-
-        .action-buttons {
-            margin-bottom: 20px;
-        }
-
-        .action-buttons a {
-            text-decoration: none;
-            background-color: #1E88E5;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .action-buttons a:hover {
-            background-color: #005b99;
-        }
-
-        form {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        input[type="text"], select {
-            width: 60%;
-            padding: 12px;
-            border: 1px solid #1E88E5;
-            border-radius: 5px;
-        }
-
-        button {
-            background-color: #1E88E5;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            width: auto;
-        }
-
-        button:hover {
-            background-color: #005b99;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            text-align: center;
-            padding: 15px;
-        }
-
-        th {
-            background-color: #1E88E5;
-            color: white;
-            font-weight: bold;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #e0f2ff;
-        }
-
-        .img-placeholder {
-            font-size: 0.9rem;
-            color: #888;
-        }
-
-        .message {
-            color: green;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        footer {
-            margin-top: 30px;
-            padding: 10px;
-            text-align: center;
-            background-color: white;
-            color: #1E88E5;
-            font-weight: bold;
-            border-radius: 0 0 10px 10px;
-        }
-    </style>
 </head>
 <body>
-<header>
-    <div class="header-container">
-        <div class="logo">
-            <h1>Time Limit</h1>
-        </div>
-        <div class="header-nav">
-            <div th:if="${session.userId == null}">
-                <a href="/login" class="highlight">로그인</a>
-                <a href="/signup" class="highlight">회원가입</a>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>Time Limit</h1>
             </div>
-            <div th:if="${session.userId != null}">
-                <span class="welcome-text">환영합니다!</span>
-                <a href="/logout" class="highlight">로그아웃</a>
+            <div class="header-nav">
+                <div th:if="${session.userId == null}">
+                    <a href="/login" class="highlight">로그인</a>
+                    <a href="/signup" class="highlight">회원가입</a>
+                </div>
+                <div th:if="${session.userId != null}">
+                    <span class="welcome-text">환영합니다!</span>
+                    <a href="/logout" class="highlight">로그아웃</a>
+                </div>
             </div>
         </div>
+        <nav class="category-nav">
+            <a href="/home" th:classappend="${currentCategory == 'all' ? 'active' : ''}">전체 게시글</a>
+            <a href="/home/expiring" th:classappend="${currentCategory == 'recent-expiring' ? 'active' : ''}">곧 사라지는 게시글</a>
+            <a href="/home/popular" th:classappend="${currentCategory == 'popular' ? 'active' : ''}">인기 게시글</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>게시판</h2>
+
+        <div class="action-buttons" th:if="${session.userId != null}">
+            <a href="/board/addform">게시글 작성</a>
+        </div>
+
+        <div class="message" th:if="${message}">
+            <p th:text="${message}"></p>
+        </div>
+
+        <form action="/board/search" method="get">
+            <input type="text" name="search" placeholder="검색어를 입력하세요">
+            <button type="submit">검색</button>
+        </form>
+
+        <div style="display: flex; justify-content: center; align-items: center;">
+        <form action="/board/searchEmotion" method="get" style="display: inline-block; width: 48%;">
+            <label for="emotion">감정 : </label>
+            <select name="search" id="emotion">
+                <option value="" disabled selected>감정을 선택하세요</option>
+                <option value="기쁨">기쁨</option>
+                <option value="슬픔">슬픔</option>
+                <option value="분노">분노</option>
+            </select>
+            <button type="submit">검색</button>
+        </form>
+
+        <div class="action-buttons" style="display: inline-block;">
+            <a href="/statistics" style="text-decoration: none; background-color: #1E88E5; color: white; padding: 10px 20px; border-radius: 5px;">통계 그래프</a>
+        </div>
     </div>
-    <nav class="category-nav">
-        <a href="/home" th:classappend="${currentCategory == 'all' ? 'active' : ''}">전체 게시글</a>
-        <a href="/home/expiring" th:classappend="${currentCategory == 'recent-expiring' ? 'active' : ''}">곧 사라지는 게시글</a>
-        <a href="/home/popular" th:classappend="${currentCategory == 'popular' ? 'active' : ''}">인기 게시글</a>
-    </nav>
-</header>
 
-<main>
-    <h2>게시판</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>이미지</th>
+                <th>수정/삭제</th>
+            </tr>
+            </thead>
+            <tbody>
 
-    <div class="action-buttons" th:if="${session.userId != null}">
-        <a href="/board/addform">게시글 작성</a>
-    </div>
+            <tr th:if="${findTitle != null || findEmotion != null}" th:each="Board : ${findTitle != null ? findTitle : findEmotion}">
+                <td th:text="${Board.idx}"></td>
+                <td><a th:href="@{/board/{id}(id=${Board.idx})}" th:text="${Board.title}"></a></td>
+                <td th:text="${Board.content}"></td>
+                <td th:text="${Board.userName}"></td>
+                <td th:text="${Board.createTime}"></td>
+                <td>
+                    <img th:if="${Board.image != null}" th:src="${Board.image}" width="50" height="50"/>
+                    <span class="img-placeholder" th:if="${Board.image == null}">이미지 없음</span>
+                </td>
+                <td th:if="${session.userId != null}">
+                    <a th:href="@{/board/delete/{id}(id=${Board.idx})}">삭제</a> |
+                    <a th:href="@{/board/update/{id}(id=${Board.idx})}">수정</a>
+                </td>
+            </tr>
 
-    <div class="message" th:if="${message}">
-        <p th:text="${message}"></p>
-    </div>
+            <tr th:if="${findTitle == null}" th:each="Board : ${Boards}">
+                <td th:text="${Board.idx}"></td>
+                <td><a th:href="@{/board/{id}(id=${Board.idx})}" th:text="${Board.title}"></a></td>
+                <td th:text="${Board.content}"></td>
+                <td th:text="${Board.userName}"></td>
+                <td th:text="${Board.createTime}"></td>
+                <td>
+                    <img th:if="${Board.image != null}" th:src="${Board.image}" width="50" height="50"/>
+                    <span class="img-placeholder" th:if="${Board.image == null}">이미지 없음</span>
+                </td>
+                <td th:if="${session.userId != null}">
+                    <a th:href="@{/board/delete/{id}(id=${Board.idx})}">삭제</a> |
+                    <a th:href="@{/board/update/{id}(id=${Board.idx})}">수정</a>
+                </td>
+            </tbody>
+        </table>
+    </main>
 
-    <form action="/board/search" method="get">
-        <input type="text" name="search" placeholder="검색어를 입력하세요">
-        <button type="submit">검색</button>
-    </form>
-
-    <div style="display: flex; justify-content: center; align-items: center;">
-    <!-- 감정 검색 폼 -->
-    <form action="/board/searchEmotion" method="get" style="display: inline-block; width: 48%;">
-        <label for="emotion">감정 : </label>
-        <select name="search" id="emotion">
-            <option value="" disabled selected>감정을 선택하세요</option>
-            <option value="기쁨">기쁨</option>
-            <option value="슬픔">슬픔</option>
-            <option value="분노">분노</option>
-        </select>
-        <button type="submit">검색</button>
-    </form>
-
-    <!-- 이동 버튼 -->
-    <div class="action-buttons" style="display: inline-block;">
-        <a href="/statistics" style="text-decoration: none; background-color: #1E88E5; color: white; padding: 10px 20px; border-radius: 5px;">통계 그래프</a>
-    </div>
-</div>
-
-
-
-    <table>
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>내용</th>
-            <th>작성자</th>
-            <th>작성일</th>
-            <th>이미지</th>
-            <th>수정/삭제</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- 검색 결과가 있을 경우 -->
-        <tr th:if="${findTitle != null || findEmotion != null}" th:each="Board : ${findTitle != null ? findTitle : findEmotion}">
-            <td th:text="${Board.idx}"></td>
-            <td><a th:href="@{/board/{id}(id=${Board.idx})}" th:text="${Board.title}"></a></td>
-            <td th:text="${Board.content}"></td>
-            <td th:text="${Board.userName}"></td>
-            <td th:text="${Board.createTime}"></td>
-            <td>
-                <img th:if="${Board.image != null}" th:src="${Board.image}" width="50" height="50"/>
-                <span class="img-placeholder" th:if="${Board.image == null}">이미지 없음</span>
-            </td>
-            <td th:if="${session.userId != null}">
-                <a th:href="@{/board/delete/{id}(id=${Board.idx})}">삭제</a> |
-                <a th:href="@{/board/update/{id}(id=${Board.idx})}">수정</a>
-            </td>
-        </tr>
-
-        <!-- 검색 결과가 없을 경우 전체 리스트 표시 -->
-        <tr th:if="${findTitle == null}" th:each="Board : ${Boards}">
-            <td th:text="${Board.idx}"></td>
-            <td><a th:href="@{/board/{id}(id=${Board.idx})}" th:text="${Board.title}"></a></td>
-            <td th:text="${Board.content}"></td>
-            <td th:text="${Board.userName}"></td>
-            <td th:text="${Board.createTime}"></td>
-            <td>
-                <img th:if="${Board.image != null}" th:src="${Board.image}" width="50" height="50"/>
-                <span class="img-placeholder" th:if="${Board.image == null}">이미지 없음</span>
-            </td>
-            <td th:if="${session.userId != null}">
-                <a th:href="@{/board/delete/{id}(id=${Board.idx})}">삭제</a> |
-                <a th:href="@{/board/update/{id}(id=${Board.idx})}">수정</a>
-            </td>
-        </tbody>
-    </table>
-</main>
-
-<footer>
-    © 2024 Time Limit
-</footer>
+    <footer>
+        © 2024 Time Limit
+    </footer>
 </body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: white;
+        color: #1E88E5;
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-container {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+    }
+
+    .logo h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #1E88E5;
+    }
+
+    .header-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-nav a {
+        color: #1E88E5;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 8px 15px;
+        border-radius: 5px;
+        border: 2px solid #1E88E5;
+        background-color: white;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .header-nav a:hover {
+        background-color: #1E88E5;
+        color: white;
+    }
+
+    .header-nav .highlight {
+        background-color: #1E88E5;
+        color: white;
+        font-weight: bold;
+    }
+
+    .welcome-text {
+        margin-right: 10px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #1E88E5;
+    }
+
+    .category-nav {
+        display: flex;
+        justify-content: center;
+        background-color: #f1f1f1;
+        padding: 10px 0;
+        margin-top: 10px;
+        border-bottom: 2px solid #1E88E5;
+    }
+
+    .category-nav a {
+        text-decoration: none;
+        color: #333;
+        padding: 10px 20px;
+        margin: 0 5px;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .category-nav a:hover {
+        background-color: #1E88E5;
+        color: white;
+    }
+
+    .category-nav a.active {
+        background-color: #1E88E5;
+        color: white;
+    }
+
+    main {
+        width: 70%;
+        margin: 50px auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #1E88E5;
+        margin-bottom: 30px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-bottom: 2px solid #007acc;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+
+    .action-buttons {
+        margin-bottom: 20px;
+    }
+
+    .action-buttons a {
+        text-decoration: none;
+        background-color: #1E88E5;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        display: inline-block;
+    }
+
+    .action-buttons a:hover {
+        background-color: #005b99;
+    }
+
+    form {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    input[type="text"], select {
+        width: 60%;
+        padding: 12px;
+        border: 1px solid #1E88E5;
+        border-radius: 5px;
+    }
+
+    button {
+        background-color: #1E88E5;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        width: auto;
+    }
+
+    button:hover {
+        background-color: #005b99;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        text-align: center;
+        padding: 15px;
+    }
+
+    th {
+        background-color: #1E88E5;
+        color: white;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #e0f2ff;
+    }
+
+    .img-placeholder {
+        font-size: 0.9rem;
+        color: #888;
+    }
+
+    .message {
+        color: green;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    footer {
+        margin-top: 30px;
+        padding: 10px;
+        text-align: center;
+        background-color: white;
+        color: #1E88E5;
+        font-weight: bold;
+        border-radius: 0 0 10px 10px;
+    }
+</style>
 </html>
